@@ -12,9 +12,11 @@ export default function SignUp() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
-  const handleSubmit = async (e) =>{
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+  //  if(! formData.username || ! formData.password || !formData.email){
+  //   return setErrorMessage('Please fill out all field');
+  //  }
     try {
       setLoading(true);
       setErrorMessage(null);
@@ -36,10 +38,9 @@ export default function SignUp() {
       setLoading(false);
     }
   };
-
   return (
-    <div className=' mt-20'>
-      <div className='flex max-w-5xl mx-auto  flex-col md:flex-row md:items-center '>
+    <div className='min-h-screen mt-20'>
+      <div className='flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5'>
         {/* left */}
         <div className='flex-1'>
           <Link to='/' className='font-bold dark:text-white text-4xl'>
@@ -48,16 +49,16 @@ export default function SignUp() {
             </span>
             Blog
           </Link>
-          <p className='text-sm mt-8 font-bold' >
+          <p className='text-sm mt-5'>
             This is a demo project. You can sign up with your email and password
             or with Google.
           </p>
         </div>
         {/* right */}
 
-        <div className='flex-1 ' >
-          <form className='flex flex-col gap-4 ' onSubmit={handleSubmit} >
-            <div className=' text-4xl'>
+        <div className='flex-1'>
+          <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
+            <div>
               <Label value='Your username' />
               <TextInput
                 type='text'
@@ -75,7 +76,7 @@ export default function SignUp() {
                 onChange={handleChange}
               />
             </div>
-            <div >
+            <div>
               <Label value='Your password' />
               <TextInput
                 type='password'
@@ -98,9 +99,9 @@ export default function SignUp() {
                 'Sign Up'
               )}
             </Button>
-            {/* <OAuth /> */}
+            
           </form>
-          <div className='flex gap-2 text-md mt-5'>
+          <div className='flex gap-2 text-sm mt-5'>
             <span>Have an account?</span>
             <Link to='/sign-in' className='text-blue-500'>
               Sign In
@@ -114,5 +115,5 @@ export default function SignUp() {
         </div>
       </div>
     </div>
-  )
+  );
 }
