@@ -5,13 +5,14 @@ import {getDownloadURL, getStorage, ref, uploadBytesResumable} from 'firebase/st
 import { app } from '../firebase'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { updateFailure,deleteUserFailure,deleteUserSuccess,deleteUserStart, signoutSuccess ,updateSuccess,updateStart } from '../redux/user/user.Slice';
+import { updateFailure,deleteUserFailure,deleteUserSuccess,deleteUserStart, signoutSuccess ,updateSuccess,updateStart } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import{ HiOutlineExclamationCircle} from 'react-icons/hi';
+import {Link} from 'react-router-dom'
 
 
-export default function DashProfile  ()  {
-  const {currentUser,error}  = useSelector(state => state.user)
+ export default function DashProfile  ()  {
+  const {currentUser,error,loading}  = useSelector((state) => state.user)
   const [imageFile,setImageFile] = useState(null)
   const [imageFileUrl , setImageFileUrl] = useState(null) 
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
@@ -20,14 +21,15 @@ export default function DashProfile  ()  {
   const [updateUserSuccess, setupdateUserSuccess ] = useState(null);
   const [updateUserError, setUpdateUserError]=useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [formData ,setFormData] = useState(null)
+  const [formData ,setFormData] = useState({})
   const filePickerRef = useRef();
+
 
   const dispatch = useDispatch();
 
   
   const handleImageChange =(e) => {
-    onchange
+    
    const file = (e.target.files[0]);
    if(file){
     setImageFile(file);
@@ -39,6 +41,7 @@ export default function DashProfile  ()  {
     uploadImage();
   }
  },[imageFile])
+
 const uploadImage = async()=>{
   console.log('uploading image..')
 
@@ -56,16 +59,16 @@ const uploadImage = async()=>{
        setImageFileUploadProgress(progress.toFixed(0))
     },
     (error) =>{
-setImageFileUploadError('Could not upload image file must be less than 2MB')
+ setImageFileUploadError('Could not upload image file must be less than 2MB')
  setImageFileUploadProgress(null) ;
  setImageFile(null);
  setImageFileUrl(null) 
  setImageFileUploadLoading(false) 
 },
     ()=>{
-      getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl)=>{
-        setImageFileUrl(downloadUrl);
-        setFormData({ ...formData, profilePicture: downloadUrl});
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL)=>{
+        setImageFileUrl(downloadURL);
+        setFormData({ ...formData, profilePicture: downloadURL});
         setImageFileUploadLoading(false)
       })
     }
@@ -74,6 +77,8 @@ setImageFileUploadError('Could not upload image file must be less than 2MB')
 const handleChange = (e)=>{
   setFormData({ ...formData, [e.target.id]: e.target.value});
 }
+
+
 
 const handleSubmit = async (e) => {
  e.preventDefault();
@@ -96,7 +101,7 @@ const handleSubmit = async (e) => {
     },
     body: JSON.stringify(formData),
   });
- const data=await res.json();
+ const data = await res.json();
  if(!res.ok){
   dispatch(updateFailure(data.message))
   setUpdateUserError(data.message);
@@ -189,9 +194,22 @@ const handleSignout = async () => {
      <TextInput type='email' id='email' placeholder='email' defaultValue={currentUser.email} onChange ={handleChange}/>
      <TextInput type='password' id='password' placeholder='password' onChange ={handleChange}/>
 
-     <Button type='submit' gradientDuoTone={'purpleToBlue'} outline>
-      update
+     <Button type='submit' gradientDuoTone={'purpleToBlue'} outline  disabled={ loading || imageFileUploadLoading}>
+      {loading ? 'Loading..' : 'Update' }
      </Button>
+     {
+      currentUser.isAdmin && (
+        <Link to={'/create-post'}>
+        <Button 
+        type='button'
+        gradientDuoTone='purpleToPink'
+        className='w-full'
+        > 
+        Create a Post 
+        </Button>
+        </Link>
+      )
+     }
     </form>
     <div className='text-orange-600 flex justify-between mt-5'>
       <span onClick={() => setShowModal(true)} className='cursor-pointer' > Delete Account</span>

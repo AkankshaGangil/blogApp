@@ -3,7 +3,7 @@ import { test, updateUser, deleteUser, signout } from '../controller/user.contro
  import { verifyToken } from '../utils/verifyUser.js';
 
  const router = express.Router();
-
+// correct
  router.get('/test', test);
  router.put('/update/:userId',verifyToken, updateUser);
  router.delete('/delete/:userId', verifyToken,deleteUser);

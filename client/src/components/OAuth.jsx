@@ -3,14 +3,14 @@ import React from 'react'
 import { AiFillGoogleCircle } from 'react-icons/ai'
 import {GoogleAuthProvider, signInWithPopup,getAuth} from 'firebase/auth';
 import { app } from '../firebase';
-import { signInSuccess } from '../redux/user/user.Slice';
+import { signInSuccess } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 export const OAuth = () => {
 
     const dispatch = useDispatch();
-  const navigate = useNavigate();
+    const navigate = useNavigate();
     const auth = getAuth(app);
 const handleGoogleClick =  async ()=>{
     const provider = new  GoogleAuthProvider()

@@ -5,7 +5,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from 'react-redux';
 import  {toggleTheme} from '../redux/theme/themeSlice' 
-import { signoutSuccess } from '../redux/user/user.Slice';
+import { signoutSuccess } from '../redux/user/userSlice';
 
 
 
@@ -57,7 +57,7 @@ const handleSignout = async () => {
           pill
           onClick={() => dispatch(toggleTheme())}
         >
-              {theme === 'light' ? <FaSun/> : <FaMoon/>}
+            {theme === 'light' ? <FaSun/> : <FaMoon/>}
             </Button>
 
             {currentUser ? (
